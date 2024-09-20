@@ -1,0 +1,9 @@
+python-dotenv
+requests
+tqdm
+transformers
+peft
+optimum
+torch
+flask
+supabase
