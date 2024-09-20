@@ -3,6 +3,8 @@ World's first bi-drectional brainrot translator.<br>
 
 <i>Youwei Zhen 2024</i>
 
+[Live Production Site](https://genplus.youweizhen.com/)
+
 ## Woah! View the complete Gen+ Translator Repos
 - [LLM + Finetuning](https://github.com/AntoDono/GenPlus-Translator)
 - [Frontend](https://github.com/AntoDono/GenPlus-Translator-Frontend)
