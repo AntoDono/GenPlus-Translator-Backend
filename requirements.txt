@@ -7,3 +7,5 @@ optimum
 torch
 flask
 supabase
+flask_cors
+auto_gtpq
