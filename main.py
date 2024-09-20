@@ -12,7 +12,12 @@ model_name = os.getenv("MODEL")
 device = os.getenv("DEVICE")
 url = os.getenv("SUPABASE_URL")
 key = os.getenv("SUPABASE_KEY")
-supabase = create_client(url, key)
+
+superbase = None
+
+if url == None or key == None:
+    print("No superbase credentials, skipping superbase init.")
+    supabase = create_client(url, key)
 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
