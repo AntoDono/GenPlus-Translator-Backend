@@ -68,7 +68,7 @@ def translate():
     )
     
     try:
-        output = tokenizer.decode(output_ids[0]).split("Output: ")[1]
+        output = tokenizer.decode(output_ids[0], skip_special_tokens=True).split("Output: ")[1]
         output = output.split("Words replaced:")
         translation = output[0]
         words = output[1].split(",")
