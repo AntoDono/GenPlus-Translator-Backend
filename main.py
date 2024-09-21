@@ -21,7 +21,7 @@ if url == None or key == None:
 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-model = AutoModelForCausalLM.from_pretrained(model_name, max_length=256, device=device)
+model = AutoModelForCausalLM.from_pretrained(model_name, max_length=256, device_map=device)
 model = PeftModel.from_pretrained(model, "./adapter", max_length=256).to(device)
 
 class StoppingCriteriaSub(StoppingCriteria):
