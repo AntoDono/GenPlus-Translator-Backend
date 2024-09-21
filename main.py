@@ -5,6 +5,7 @@ from flask_cors import CORS, cross_origin
 import os
 from supabase import create_client, Client
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -23,6 +24,17 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 model = AutoModelForCausalLM.from_pretrained(model_name, max_length=256, device_map=device)
 model = PeftModel.from_pretrained(model, "./adapter", max_length=256).to(device)
+
+def read_json(path: str) -> any:
+    try:
+        with open(path, 'r') as r:
+            data = json.load(r)
+        return data
+    except Exception as e:
+        print(e)
+        return None
+    
+vocab = read_json("./vocabulary.json")
 
 class StoppingCriteriaSub(StoppingCriteria):
 
@@ -72,6 +84,9 @@ def translate():
         output = output.split("Words replaced:")
         translation = output[0]
         words = output[1].split(",")
+        words_with_definition = []
+        for word in words:
+            words_with_definition.append([word, vocab.get(word.lower())])
     except:
         return 500
     
