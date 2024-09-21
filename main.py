@@ -86,6 +86,7 @@ def translate():
         words = output[1].split(", ")
         words_with_definition = []
         for word in words:
+            word = word.strip()
             words_with_definition.append([word, vocab.get(word.lower())])
     except:
         return 500
