@@ -83,7 +83,7 @@ def translate():
         output = tokenizer.decode(output_ids[0], skip_special_tokens=True).split("Output: ")[1]
         output = output.split("Words replaced:")
         translation = output[0]
-        words = output[1].split(",")
+        words = output[1].split(", ")
         words_with_definition = []
         for word in words:
             words_with_definition.append([word, vocab.get(word.lower())])
