@@ -1,4 +1,4 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, StoppingCriteria, StoppingCriteriaList
 from peft import PeftModel
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
@@ -24,6 +24,22 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name, max_length=256)
 model = PeftModel.from_pretrained(model, "./adapter", max_length=256).to(device)
 
+class StoppingCriteriaSub(StoppingCriteria):
+
+    def __init__(self, stops = []):
+        self.stop_id = stops
+        StoppingCriteria.__init__(self)
+
+    def __call__(self, input_ids, scores):
+        last_id = input_ids.tolist()[-1] 
+        for id in stop_words_ids:
+            if id == last_id:
+                return True
+        return False
+
+stop_words_ids = [tokenizer.eos_token_id]
+stopping_criteria = StoppingCriteriaList([StoppingCriteriaSub(stop_words_ids)])
+
 app = Flask(__name__)
 CORS(app, support_credentials=True)
 
@@ -43,11 +59,12 @@ def translate():
         instruction = "Rewrite the following slang sentence to english and identify the words replaced."
         
     encoded = tokenizer(
-        f"{instruction}\nInput: {user_input}", 
+        f"{instruction}\nInput: {user_input}\nOutput: ", 
         return_tensors="pt").to(device)
     
     output_ids = model.generate(
-        **encoded
+        **encoded,
+        stopping_criteria=stopping_criteria
     )
     
     try:
