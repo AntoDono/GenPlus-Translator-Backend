@@ -68,11 +68,14 @@ def translate():
     )
     
     try:
-        output = tokenizer.decode(output_ids[0]).split("Output: ")[1].split("Words replaced")[0]
+        output = tokenizer.decode(output_ids[0]).split("Output: ")[1]
+        output = output.split("Words replaced:")
+        translation = output[0]
+        words = output[1].split(",")
     except:
         return 500
     
-    return dict(result=output)    
+    return dict(result=translation, words=words)    
     
 if __name__ == "__main__":
     app.run(debug=False)
