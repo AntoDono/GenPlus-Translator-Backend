@@ -90,7 +90,7 @@ def translate():
     except:
         return 500
     
-    return dict(result=translation, words=words)    
+    return dict(result=translation, words=wowords_with_definitionrds)    
     
 if __name__ == "__main__":
     app.run(debug=False)
