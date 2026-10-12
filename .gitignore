@@ -1,2 +1,8 @@
-.env
 venv
+.venv
+__pycache__/
+
+# secrets / local config
+.env
+.env.*
+!.env.example
