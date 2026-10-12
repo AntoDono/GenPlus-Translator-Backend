@@ -1,11 +1,7 @@
 python-dotenv
-requests
-tqdm
+torch
 transformers
 peft
-optimum
-torch
+accelerate
 flask
-supabase
 flask_cors
-auto_gtpq

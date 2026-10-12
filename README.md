@@ -11,32 +11,29 @@ World's first bi-drectional brainrot translator.<br>
 - [Backend](https://github.com/AntoDono/GenPlus-Translator-Backend)
 
 ## Backend
-This is the backend part of Gen+ Translator, built on python flask. This essentially is an server that hosts the model of Gen+ Translator.
+This is the backend of Gen+ Translator, built on Python Flask. It serves the fine-tuned model (base model + LoRA adapter in `./adapter`) from [GenPlus-Translator](https://github.com/AntoDono/GenPlus-Translator).
+
+### API
+- `POST /translate` with `{"direction": "en-to-slang" | "slang-to-en", "text": "..."}` (max 500 characters) returns `{"translation": "...", "terms": [{"word", "definition", "side", "start", "end"}]}`. Each term is a slang word found on the slang side of the pair: `side` is `"input"` or `"output"`, and `start`/`end` are character offsets into that text. The v1 fields (`Translation-Type`, `User-Input`, `result`, `words`) still work.
+- `POST /define` with `{"word": "rizz"}` returns `{"word", "definition", "explanation"}`, where `explanation` is written by the model.
+- `GET /vocabulary` returns every term and its definition.
+- `GET /health` returns the status and the loaded base model.
+
+Errors return `{"error": {"code", "message"}}` with status 400, 422 or 500.
 
 ## Setup
 
-1. Create virtual environment (optional):
+1. Create a virtual environment and install dependencies:
 ```bash
-python -m venv venv
+uv venv .venv && uv pip install --python .venv/bin/python -r requirements.txt
 ```
-2. Activate the environment:
-```bash
-source ./venv/bin/activate <- linux-based
-
-.\venv\Scripts\activate <- windows
-```
-3. Install the dependencies:
-```bash
-pip install -r requirements.txt
-```
-4. Create a .env and fill out the following:
+2. Copy `.env.example` to `.env` (git-ignored) and set:
 ```.env
-MODEL <- Base model for the PeFT
-DEVICE <- CPU for cpu, cuda:0 for GPU
-SUPABASE_URL <- Superbase API stuff (optional)
-SUPABASE_KEY <- Superbase API stuff (optional)
+MODEL="gpt2-large"       <- base model the adapter was trained on
+ADAPTER_PATH="./adapter"
+DEVICE="cuda:0"          <- or "cpu"
 ```
-5. Run server:
+3. Run the server. It listens on `$PORT`, default 5000:
 ```bash
 python main.py
 ```
