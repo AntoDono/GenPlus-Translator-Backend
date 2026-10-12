@@ -3,7 +3,9 @@ import os
 import re
 import threading
 
-import torch
+os.environ.setdefault("CUDA_DEVICE_ORDER", "PCI_BUS_ID")  # cuda:N matches nvidia-smi
+
+import torch  # noqa: E402
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
